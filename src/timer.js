@@ -1,34 +1,58 @@
 import React, { useState, useEffect } from 'react';
 
 function Timer() {
-  const [time, setTime] = useState(25 * 60); // 25 minutos em segundos
+  const [minutes, setMinutes] = useState(25);
+  const [seconds, setSeconds] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {
-    let interval;
+    let timer;
     if (isRunning) {
-      interval = setInterval(() => {
-        setTime((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
+      timer = setInterval(() => {
+        if (seconds === 0) {
+          if (minutes === 0) {
+            clearInterval(timer);
+            alert("Pomodoro finished! Take a break.");
+            setMinutes(25);
+            setSeconds(0);
+          } else {
+            setMinutes(minutes - 1);
+            setSeconds(59);
+          }
+        } else {
+          setSeconds(seconds - 1);
+        }
       }, 1000);
     } else {
-      clearInterval(interval);
+      clearInterval(timer);
     }
-    return () => clearInterval(interval);
-  }, [isRunning]);
 
-  const formatTime = (seconds) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    return () => clearInterval(timer);
+  }, [minutes, seconds, isRunning]);
+
+  const toggleTimer = () => {
+    setIsRunning(!isRunning);
+  };
+
+  const resetTimer = () => {
+    setIsRunning(false);
+    setMinutes(25);
+    setSeconds(0);
   };
 
   return (
-    <div>
-      <h2>{formatTime(time)}</h2>
-      <button onClick={() => setIsRunning(!isRunning)}>
-        {isRunning ? 'Pause' : 'Start'}
-      </button>
-      <button onClick={() => setTime(25 * 60)}>Reset</button>
+    <div className="timer">
+      <div>
+        {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
+      </div>
+      <div>
+        <button className="button" onClick={toggleTimer}>
+          {isRunning ? 'Pause' : 'Start'}
+        </button>
+        <button className="button" onClick={resetTimer}>
+          Reset
+        </button>
+      </div>
     </div>
   );
 }
