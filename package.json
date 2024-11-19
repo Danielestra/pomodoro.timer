@@ -1,7 +1,7 @@
 {
   "name": "pomodoro-timer",
   "version": "1.0.0",
-  "homepage": "https://github.com/Danielestra/pomodoro.timer",  
+  "homepage": "https://danielestra.github.io/pomodoro.timer/",  
   "dependencies": {
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
